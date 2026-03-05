@@ -22,16 +22,17 @@ jobs:
           pip install pyinstaller
           pip install -r requirements.txt
 
-      - name: Build exe (include mgrs binaries)
+      - name: Build exe (onedir is required for mgrs)
         shell: cmd
         run: >
-          pyinstaller --onefile --windowed --name converter
+          pyinstaller --noconfirm --clean
+          --onedir --windowed --name converter
           --collect-binaries mgrs --collect-submodules mgrs
           --collect-binaries pyproj --collect-submodules pyproj
           app.py
 
-      - name: Upload artifact
+      - name: Upload artifact (folder)
         uses: actions/upload-artifact@v4
         with:
           name: converter-windows
-          path: dist/converter.exe
+          path: dist/converter/
