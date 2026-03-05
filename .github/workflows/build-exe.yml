@@ -27,7 +27,8 @@ jobs:
         run: >
           pyinstaller --noconfirm --clean
           --onedir --windowed --name converter
-          --collect-all mgrs --collect-all pyproj
+          --collect-all mgrs --collect-binaries mgrs
+          --collect-all pyproj --collect-binaries pyproj
           app.py
 
       - name: Upload artifact
