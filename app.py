@@ -67,15 +67,11 @@ def latlon_to_mgrs(lat, lon, precision=5):
     return f"{zone:02d}{band}{sq}{e_rem // d:0{precision}d}{n_rem // d:0{precision}d}"
 
 
-# ── Conversion wrapper ─────────────────────────────────────────────────────────
-
 def convert_5641(x, y, precision=5):
     lon, lat = _to_wgs84.transform(x, y)
     mgrs_str = latlon_to_mgrs(lat, lon, precision)
     return mgrs_str, lat, lon
 
-
-# ── GUI callbacks ──────────────────────────────────────────────────────────────
 
 def do_convert():
     try:
@@ -143,7 +139,7 @@ root.resizable(False, False)
 nb = ttk.Notebook(root)
 nb.grid(row=0, column=0, sticky="nsew", padx=8, pady=8)
 
-# ── Single tab ─────────────────────────────────────────────────────────────────
+# ── Single tab
 tab_single = ttk.Frame(nb)
 nb.add(tab_single, text="Single")
 pad = {"padx": 10, "pady": 6}
@@ -163,40 +159,34 @@ ttk.Spinbox(tab_single, from_=1, to=5, textvariable=precision_var, width=5).grid
 )
 
 btns = ttk.Frame(tab_single)
-bns.grid(row=3, column=0, columnspan=2, sticky="ew", padx=10, pady=8)
+btns.grid(row=3, column=0, columnspan=2, sticky="ew", padx=10, pady=8)
 ttk.Button(btns, text="Convert", command=do_convert).grid(row=0, column=0, padx=5)
 ttk.Button(btns, text="Copy MGRS", command=copy_mgrs).grid(row=0, column=1, padx=5)
 
 ttk.Separator(tab_single).grid(row=4, column=0, columnspan=2, sticky="ew", padx=10, pady=4)
-
 ttk.Label(tab_single, text="MGRS").grid(row=5, column=0, sticky="w", **pad)
 mgrs_var = tk.StringVar()
 ttk.Entry(tab_single, textvariable=mgrs_var, width=38, state="readonly").grid(row=5, column=1, **pad)
-
 ttk.Label(tab_single, text="Lat (WGS84)").grid(row=6, column=0, sticky="w", **pad)
 lat_var = tk.StringVar()
 ttk.Entry(tab_single, textvariable=lat_var, width=38, state="readonly").grid(row=6, column=1, **pad)
-
 ttk.Label(tab_single, text="Lon (WGS84)").grid(row=7, column=0, sticky="w", **pad)
 lon_var = tk.StringVar()
 ttk.Entry(tab_single, textvariable=lon_var, width=38, state="readonly").grid(row=7, column=1, **pad)
 
 root.bind("<Return>", lambda _e: do_convert())
 
-# ── Batch tab ──────────────────────────────────────────────────────────────────
+# ── Batch tab
 tab_batch = ttk.Frame(nb)
-bnb.add(tab_batch, text="Paste & Convert")
-
+nb.add(tab_batch, text="Paste & Convert")
 ttk.Label(tab_batch, text="Paste X Y pairs (one per line, space/tab separated):").grid(
     row=0, column=0, columnspan=2, sticky="w", padx=10, pady=(10, 2)
 )
 batch_text = tk.Text(tab_batch, width=50, height=8, font=("Courier", 10))
 batch_text.grid(row=1, column=0, columnspan=2, padx=10, pady=4)
-
 ttk.Button(tab_batch, text="Convert All", command=do_batch).grid(
     row=2, column=0, columnspan=2, pady=6
 )
-
 ttk.Label(tab_batch, text="Results (X  Y  MGRS  Lat  Lon):").grid(
     row=3, column=0, columnspan=2, sticky="w", padx=10, pady=(6, 2)
 )
