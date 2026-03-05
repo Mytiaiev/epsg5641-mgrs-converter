@@ -23,16 +23,12 @@ jobs:
           pip install -r requirements.txt
 
       - name: Build exe (include mgrs binaries)
-        run: |
-          pyinstaller ^
-            --onefile ^
-            --windowed ^
-            --name converter ^
-            --collect-binaries mgrs ^
-            --collect-submodules mgrs ^
-            --collect-binaries pyproj ^
-            --collect-submodules pyproj ^
-            app.py
+        shell: cmd
+        run: >
+          pyinstaller --onefile --windowed --name converter
+          --collect-binaries mgrs --collect-submodules mgrs
+          --collect-binaries pyproj --collect-submodules pyproj
+          app.py
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
