@@ -1,3 +1,19 @@
+import os
+import sys
+
+# Fix for PyInstaller: ensure mgrs can find its native library
+if getattr(sys, 'frozen', False):
+    # Running as PyInstaller bundle
+    try:
+        base_path = sys._MEIPASS
+        mgrs_dir = os.path.join(base_path, "mgrs")
+        if os.path.isdir(mgrs_dir):
+            os.environ["PATH"] = mgrs_dir + os.pathsep + os.environ.get("PATH", "")
+            if mgrs_dir not in sys.path:
+                sys.path.insert(0, mgrs_dir)
+    except AttributeError:
+        pass
+
 import tkinter as tk
 from tkinter import ttk, messagebox
 
