@@ -14,15 +14,25 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pyinstaller -r requirements.txt
+          pip install pyinstaller
+          pip install -r requirements.txt
 
-      - name: Build exe
-        run: pyinstaller --onefile --windowed --name converter app.py
+      - name: Build exe (include mgrs binaries)
+        run: |
+          pyinstaller ^
+            --onefile ^
+            --windowed ^
+            --name converter ^
+            --collect-binaries mgrs ^
+            --collect-submodules mgrs ^
+            --collect-binaries pyproj ^
+            --collect-submodules pyproj ^
+            app.py
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
